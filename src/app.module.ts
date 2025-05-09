@@ -5,7 +5,7 @@ import { share } from 'rxjs';
 import { SharedConfigModule } from './shared/config/config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import configuration from './shared/config/configuration';
-
+import { TextModule } from './presentation/text/text.module';
 @Module({
   imports: [
     SharedConfigModule,
@@ -13,7 +13,8 @@ import configuration from './shared/config/configuration';
       useFactory: () => ({
         uri: configuration().mongoUri,
       })
-    })
+    }),
+    TextModule
   ],
   controllers: [AppController],
   providers: [AppService],
