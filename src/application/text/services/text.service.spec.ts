@@ -1,6 +1,7 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { TextService } from "./text.service";
-import { getModelToken } from "@nestjs/mongoose";
+import { Test, TestingModule } from '@nestjs/testing';
+import { TextService } from './text.service';
+import { getModelToken } from '@nestjs/mongoose';
+import { TextAnalyzerService } from '../../../core/text/services/text-analyzer.service';
 
 describe('TextService', () => {
   let service: TextService;
@@ -10,6 +11,16 @@ describe('TextService', () => {
     save: mockSave,
   }));
 
+  const mockTextAnalyzerService = {
+    analyze: jest.fn().mockReturnValue({
+      wordCount: 2,
+      characterCount: 11,
+      sentenceCount: 1,
+      paragraphCount: 1,
+      longestWords: ['Hello', 'world'],
+    }),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -18,11 +29,15 @@ describe('TextService', () => {
           provide: getModelToken('Text'),
           useValue: mockTextModel,
         },
+        {
+          provide: TextAnalyzerService,
+          useValue: mockTextAnalyzerService,
+        },
       ],
     }).compile();
 
     service = module.get<TextService>(TextService);
-    mockSave.mockReset(); 
+    mockSave.mockReset();
   });
 
   it('should be defined', () => {
@@ -38,8 +53,8 @@ describe('TextService', () => {
 
     const result = await service.create(content, createdBy);
 
-    expect(mockTextModel).toHaveBeenCalledWith({ content, createdBy }); 
-    expect(mockSave).toHaveBeenCalled(); 
-    expect(result).toEqual(expectedResult); 
+    expect(mockTextModel).toHaveBeenCalledWith({ content, createdBy });
+    expect(mockSave).toHaveBeenCalled();
+    expect(result).toEqual(expectedResult);
   });
 });

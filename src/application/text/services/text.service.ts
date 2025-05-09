@@ -7,9 +7,8 @@ import { TextAnalyzerService } from '../../../core/text/services/text-analyzer.s
 @Injectable()
 export class TextService {
     constructor(
-        @InjectModel('Text') 
-        private readonly textModel: Model<TextDocument>,
-        private analyzer = new TextAnalyzerService()
+        @InjectModel('Text') private readonly textModel: Model<TextDocument>,
+        private readonly analyzer: TextAnalyzerService
     ){}
 
     async create(content: string, createdBy: string) {
@@ -34,6 +33,5 @@ export class TextService {
         if (!text) throw new Error('Text not found');
         
         return this.analyzer.analyze(text.content);
-        
     }
 }
