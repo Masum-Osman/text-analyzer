@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
+import { Throttle } from "@nestjs/throttler";
 import { TextService } from "src/application/text/services/text.service";
 
 @Controller('texts')
@@ -32,6 +33,7 @@ export class TextController {
       return this.textService.analyze(id);
     }
 
+    // @Throttle({ default: { limit: 3, ttl: 60000 } })
     @Get(':id/words')
     async wordCount(@Param('id') id: string) {
       const result = await this.textService.analyze(id);

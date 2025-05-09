@@ -6,6 +6,10 @@ import { SharedConfigModule } from './shared/config/config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import configuration from './shared/config/configuration';
 import { TextModule } from './presentation/text/text.module';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+
+
 @Module({
   imports: [
     SharedConfigModule,
@@ -14,10 +18,24 @@ import { TextModule } from './presentation/text/text.module';
         uri: configuration().mongoUri,
       })
     }),
-    TextModule
+    TextModule,    
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: 60000,
+          limit: 100,
+        },
+      ],
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 
 export class AppModule {}
