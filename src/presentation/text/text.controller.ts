@@ -29,7 +29,6 @@ export class TextController {
   
     @Get(':id/analyze')
     async analyze(@Param('id') id: string) {
-    //   return this.textService.analyze(id);
-        return
+      return this.textService.analyze(id);
     }
 }

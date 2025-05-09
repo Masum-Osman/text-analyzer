@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from "@nestjs/mongoose";
 import { TextService } from 'src/application/text/services/text.service';
 import { textSchema } from 'src/infrastructure/database/models/text.schema';
+import { TextController } from './text.controller';
+import { TextAnalyzerService } from 'src/core/text/services/text-analyzer.service';
 
 @Module({
     imports: [
@@ -10,8 +12,11 @@ import { textSchema } from 'src/infrastructure/database/models/text.schema';
             schema: textSchema,
         }])
     ],
-    controllers: [],
-    providers: [TextService],
+    controllers: [TextController],
+    providers: [
+        TextService,
+        TextAnalyzerService,
+    ],
 })
 
 export class TextModule {}
