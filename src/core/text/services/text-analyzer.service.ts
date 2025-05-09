@@ -1,21 +1,23 @@
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
 export class TextAnalyzerService {
-    analyze(text: string) {
-        const cleaned = text.replace(/[^\w\s]/gi, '').toLowerCase();
+  analyze(text: string) {
+    const normalized = text.replace(/[^\w\s]|_/g, '').toLowerCase();
+    const paragraphs = text.split(/\n+/).filter(Boolean);
+    const sentences = text.split(/[.!?]+/).filter(Boolean);
+    const words = normalized.split(/\s+/).filter(Boolean);
+    const characterCount = text.replace(/\s/g, '').length;
 
-        const words = cleaned.split(/\s+/).filter(Boolean);
-        const characters = cleaned.replace(/\s/g, '');
-        const sentences = text.split(/[.!?]+/).filter(Boolean);
-        const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
-    
-        const longestLength = words.reduce((max, w) => Math.max(max, w.length), 0);
-        const longestWords = Array.from(new Set(words.filter(w => w.length === longestLength)));
+    const longestLength = Math.max(...words.map(w => w.length));
+    const longestWords = [...new Set(words.filter(w => w.length === longestLength))];
 
-        return {
-            wordCount: words.length,
-            characterCount: characters.length,
-            sentenceCount: sentences.length,
-            paragraphCount: paragraphs.length,
-            longestWords,
-        };
-    }
+    return {
+      wordCount: words.length,
+      characterCount,
+      sentenceCount: sentences.length,
+      paragraphCount: paragraphs.length,
+      longestWords,
+    };
+  }
 }
