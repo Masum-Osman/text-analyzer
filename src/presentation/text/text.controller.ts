@@ -31,4 +31,35 @@ export class TextController {
     async analyze(@Param('id') id: string) {
       return this.textService.analyze(id);
     }
+
+    @Get(':id/words')
+    async wordCount(@Param('id') id: string) {
+      const result = await this.textService.analyze(id);
+      return { wordCount: result.wordCount };
+    }
+
+    @Get(':id/characters')
+    async characterCount(@Param('id') id: string) {
+      const result = await this.textService.analyze(id);
+      return { characterCount: result.characterCount };
+    }
+
+    @Get(':id/sentences')
+    async sentenceCount(@Param('id') id: string) {
+      const result = await this.textService.analyze(id);
+      return { sentenceCount: result.sentenceCount };
+    }
+
+    @Get(':id/paragraphs')
+    async paragraphCount(@Param('id') id: string) {
+      const result = await this.textService.analyze(id);
+      return { paragraphCount: result.paragraphCount };
+    }
+
+    @Get(':id/longest-words')
+    async longestWords(@Param('id') id: string) {
+      const result = await this.textService.analyze(id);
+      return { longestWords: result.longestWords };
+    }
+
 }
