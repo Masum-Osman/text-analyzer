@@ -1,5 +1,21 @@
 version: '3'
 services:
+  text-analyzer:
+    build: .
+    container_name: text-analyzer
+    environment:
+      - MONGO_URI=mongodb://mongoUser:secretPass@mongodb:27017/text-analyzer?authSource=admin
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - CACHE_TTL=60
+    depends_on:
+      - mongodb
+      - redis
+    ports:
+      - "3000:3000"
+    networks:
+      - elk
+      
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.1
     platform: linux/amd64
