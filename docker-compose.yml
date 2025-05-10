@@ -2,11 +2,13 @@ version: '3'
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.1
+    platform: linux/amd64
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - ES_JAVA_OPTS="-Xms512m -Xmx512m"
-      - "xpack.security.enabled=false"
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=false
+      - ELASTIC_PASSWORD=changeme
     ports:
       - "9200:9200"
     volumes:
@@ -17,6 +19,7 @@ services:
   logstash:
     image: docker.elastic.co/logstash/logstash:8.6.1
     container_name: logstash
+    platform: linux/amd64
     environment:
       - LOGSTASH_JAVA_OPTS="-Xmx256m -Xms256m"
     ports:
@@ -24,29 +27,65 @@ services:
     volumes:
       - ./logstash/config:/usr/share/logstash/config:ro
       - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./logs:/logs
     networks:
       - elk
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.6.1
+    platform: linux/amd64
     container_name: kibana
     ports:
       - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      # - ELASTICSEARCH_USERNAME=elastic
+      # - ELASTICSEARCH_PASSWORD=changeme
+      - ELASTICSEARCH_SERVICEACCOUNTTOKEN=AAEAAWVsYXN0aWMva2liYW5hL2tpYmFuYS10b2tlbjpSN01aWTV1WVNTcURkZTBJY3M4MnNR
+    depends_on:
+      - elasticsearch
     networks:
       - elk
 
   filebeat:
     image: docker.elastic.co/beats/filebeat:8.6.1
-    container_name: filebeat
+    platform: linux/amd64
+    user: root
     volumes:
       - ./filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
-      - ./filebeat/logs:/var/log:ro
+      - ./logs:/logs
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - logstash
     networks:
       - elk
 
+  mongodb:
+    image: mongo:6.0
+    container_name: mongo-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoUser
+      MONGO_INITDB_ROOT_PASSWORD: secretPass
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - elk
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - elk
 
 volumes:
   esdata:
+    driver: local
+  mongodb_data:
     driver: local
 
 networks:
