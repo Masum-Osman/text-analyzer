@@ -4,6 +4,7 @@ import { TextService } from 'src/application/text/services/text.service';
 import { textSchema } from 'src/infrastructure/database/models/text.schema';
 import { TextController } from './text.controller';
 import { TextAnalyzerService } from 'src/core/text/services/text-analyzer.service';
+import { RedisService } from 'src/infrastructure/redis/redis.service';
 
 @Module({
     imports: [
@@ -16,6 +17,7 @@ import { TextAnalyzerService } from 'src/core/text/services/text-analyzer.servic
     providers: [
         TextService,
         TextAnalyzerService,
+        RedisService,
     ],
 })
 

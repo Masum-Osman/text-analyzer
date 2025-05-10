@@ -35,7 +35,11 @@ export class RedisService implements OnModuleInit {
     
 
     async get<T>(key: string): Promise<T | null> {
-        const value = await this.redisClient.get(key);
+        const value = await this.redisClient.get(key);        
         return value ? JSON.parse(value) : null;
-      }
+    }
+
+    async del<T>(key: string): Promise<void> {
+        await this.redisClient.del(key);
+    }
 }
