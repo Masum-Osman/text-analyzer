@@ -102,3 +102,8 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 1. Write here why we introduced redis as cache but not as a api throttler
 2. Add TTL on redis cache
+
+commands: 
+1. Dev run `docker compose up -d elasticsearch logstash kibana filebeat mongodb redis`
+
+2. Prod run: `docker compose build`. Then `docker compose up -d`
