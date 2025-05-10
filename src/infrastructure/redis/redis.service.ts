@@ -18,7 +18,15 @@ export class RedisService implements OnModuleInit {
         });
     }
     
-    onModuleInit() {    }
+    onModuleInit() {
+        this.redisClient.on('connect', () => {
+          this.logger.log('✅ Connected to Redis');
+        });
+    
+        this.redisClient.on('error', (err) => {
+          this.logger.error('❌ Redis error:', err);
+        });
+      }
 
     async set<T>(key: string, value: T, ttlInSec?: number): Promise<void> {
         const ttl = ttlInSec || this.configService.get('redis.ttl');
