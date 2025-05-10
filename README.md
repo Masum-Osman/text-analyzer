@@ -100,4 +100,5 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 --------------
 
-1.write here why we introduced redis as cache but not as a api throttler
+1. Write here why we introduced redis as cache but not as a api throttler
+2. Add TTL on redis cache
