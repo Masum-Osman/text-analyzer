@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { CacheModule } from '@nestjs/cache-manager';
 import { config } from 'dotenv';
 import { redisStore } from 'cache-manager-ioredis';
+import { RedisModule } from './infrastructure/redis/redis.module';
 
 
 
@@ -42,6 +43,7 @@ import { redisStore } from 'cache-manager-ioredis';
         })
       })
     }),
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [
