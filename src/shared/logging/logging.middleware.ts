@@ -1,18 +1,25 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  Logger,
+} from '@nestjs/common';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
-export class LoggingMiddleware implements NestMiddleware {
-  use(req: Request, res: Response, next: NextFunction): void {
-    const { method, originalUrl } = req;
-    const start = Date.now();
+export class LoggingInterceptor implements NestInterceptor {
+  private readonly logger = new Logger('Request');
 
-    res.on('finish', () => {
-      const duration = Date.now() - start;
-      const message = `${method} ${originalUrl} ${res.statusCode} - ${duration}ms`;
-      console.log("message", message);      
-    });
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    const req = context.switchToHttp().getRequest();
+    const { method, url } = req;
+    const now = Date.now();
 
-    next();
+    return next
+      .handle()
+      .pipe(
+        tap(() => this.logger.log(`${method} ${url} - ${Date.now() - now}ms`)),
+      );
   }
 }
