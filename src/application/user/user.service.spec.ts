@@ -39,13 +39,12 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a user', async () => {
       const userDto = { username: 'test', password: 'pass123' };
-      const createdUser = { ...userDto, _id: '1' };
+      const createdUser = { ...userDto, _id: '1', password: 'a_hashed_password' };
 
       mockUserModel.create.mockResolvedValue(createdUser);
 
       expect(await service.create(userDto)).toEqual(createdUser);
-      expect(mockUserModel.create).toHaveBeenCalledWith(userDto);
-    });
+  });
 
 
     it('should hash the password before saving user', async () => {
