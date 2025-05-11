@@ -19,11 +19,25 @@ A NestJS-based text analysis microservice with Redis caching, MongoDB storage, J
 
 ## 🛠️ Requirements
 
-- Node.js 18+
+- Node.js 20+
 - Docker + Docker Compose
 - kubectl
 - (Optional) Minikube or a K8s cluster
 - Helm (optional)
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── application/       # Business logic
+├── core/              # Domain entities and services
+├── infrastructure/    # MongoDB, Redis, etc.
+├── presentation/      # Controllers, modules
+├── shared/            # Config, logger, etc.
+└── main.ts            # Entry point
+```
 
 ---
 
@@ -51,6 +65,38 @@ npm run test
 # For test coverage
 npm run test:cov
 ```
+
+--- 
+## Test Coverage
+------------------------------------|---------|----------|---------|---------|-------------------
+File                                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------------------------------|---------|----------|---------|---------|-------------------
+All files                           |   48.82 |    48.38 |   45.45 |   47.43 |                   
+ src                                |    31.7 |        0 |      60 |   25.71 |                   
+  app.controller.ts                 |     100 |      100 |     100 |     100 |                   
+  app.module.ts                     |       0 |      100 |       0 |       0 | 1-50              
+  app.service.ts                    |     100 |      100 |     100 |     100 |                   
+  main.ts                           |       0 |        0 |       0 |       0 | 1-19              
+ src/application/text/services      |   95.74 |       60 |     100 |   95.55 | 57,84             
+ src/core/text/entities             |       0 |        0 |       0 |       0 | 1-5               
+ src/core/text/services             |     100 |      100 |     100 |     100 |                   
+  text-analyzer.service.ts          |     100 |      100 |     100 |     100 |                   
+ src/infrastructure/database/models |       0 |      100 |     100 |       0 | 1-9, 1-13         
+ src/infrastructure/redis           |   54.16 |       75 |   42.85 |      55 | 22-27,43          
+ src/presentation/auth              |   60.52 |     37.5 |      80 |   61.29 | 10-12             
+ src/presentation/auth/jwt.strategy|   88.88 |       50 |      50 |   85.71 | 17                
+ src/presentation/user              |   68.96 |      100 |      80 |   69.56 | 11                
+ src/presentation/user/dto          |     100 |      100 |     100 |     100 |                   
+ src/shared/config                  |     100 |     62.5 |     100 |     100 | 2-8               
+ src/shared/logging                 |       0 |        0 |       0 |       0 | 2-55, 1-22        
+------------------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 10 passed, 10 total  
+Tests:       26 passed, 26 total  
+Snapshots:   0 total  
+Time:        15.064 s  
+Ran all test suites.
+
 
 ---
 
@@ -188,20 +234,6 @@ kubectl apply -f k8s/deploy.yaml
 ```
 
 You can use Helm or Kustomize for advanced deployment configuration (optional).
-
----
-
-## 📂 Project Structure
-
-```
-src/
-├── application/       # Business logic
-├── core/              # Domain entities and services
-├── infrastructure/    # MongoDB, Redis, etc.
-├── presentation/      # Controllers, modules
-├── shared/            # Config, logger, etc.
-└── main.ts            # Entry point
-```
 
 ---
 
