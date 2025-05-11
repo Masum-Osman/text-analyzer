@@ -9,8 +9,9 @@ import { TextModule } from './presentation/text/text.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { RedisModule } from './infrastructure/redis/redis.module';
-import { UserModule } from './application/user/user.module';
-import { AuthModule } from './application/auth/auth.module';
+import { UserModule } from './presentation/user/user.module';
+import { AuthModule } from './presentation/auth/auth.module';
+import { JwtStrategy } from './presentation/auth/jwt.strategy/jwt.strategy';
 
 
 
@@ -42,6 +43,7 @@ import { AuthModule } from './application/auth/auth.module';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    JwtStrategy,
   ],
 })
 

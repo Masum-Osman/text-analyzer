@@ -1,6 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Post } from "@nestjs/common";
-import { Throttle } from "@nestjs/throttler";
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { TextService } from "src/application/text/services/text.service";
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('texts')
 export class TextController {
@@ -8,6 +8,7 @@ export class TextController {
         private readonly textService: TextService,
     ) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post()
     async create(@Body() body: { content: string; createdBy: string }) {
       return this.textService.create(body.content, body.createdBy);
@@ -33,7 +34,6 @@ export class TextController {
       return this.textService.analyze(id);
     }
 
-    // @Throttle({ default: { limit: 3, ttl: 60000 } })
     @Get(':id/words')
     async wordCount(@Param('id') id: string) {
       const result = await this.textService.analyze(id);

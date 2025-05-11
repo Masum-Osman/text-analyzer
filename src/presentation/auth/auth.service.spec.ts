@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -49,4 +51,12 @@ describe('AuthService', () => {
     const result = await service.validateUser('john', 'wrong');
     expect(result).toBeNull();
   });
+
+  // it('should return JWT token on login', async () => {
+  //   const user = { username: 'john', _id: '123' };
+  //   jest.spyOn(jwtService, 'sign').mockReturnValue('mock-token');
+  
+  //   const token = await authService.login(user);
+  //   expect(token).toEqual({ access_token: 'mock-token' });
+  // });
 });
