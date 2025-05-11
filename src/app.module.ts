@@ -9,6 +9,7 @@ import { TextModule } from './presentation/text/text.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { RedisModule } from './infrastructure/redis/redis.module';
+import { UserModule } from './application/user/user.module';
 
 
 
@@ -30,6 +31,7 @@ import { RedisModule } from './infrastructure/redis/redis.module';
       ],
     }),
     RedisModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [
