@@ -1,0 +1,174 @@
+# 1. Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: text-analyzer
+---
+
+# Run the following once before applying:
+# kubectl create secret generic mongo-secret --from-literal=MONGO_USER=mongoUser --from-literal=MONGO_PASS=secretPass --namespace=text-analyzer
+# kubectl create secret generic redis-secret --from-literal=REDIS_HOST=redis --from-literal=REDIS_PORT=6379 --namespace=text-analyzer
+
+---
+# 3. ConfigMap for Non-Sensitive Config
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: text-analyzer
+data:
+  CACHE_TTL: "60"
+---
+# 4. MongoDB Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: text-analyzer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:6.0
+          ports:
+            - containerPort: 27017
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_USER
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_PASS
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db
+      volumes:
+        - name: mongo-persistent-storage
+          emptyDir: {}
+---
+# 5. MongoDB Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: text-analyzer
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+# 6. Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: text-analyzer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7
+          ports:
+            - containerPort: 6379
+---
+# 7. Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  namespace: text-analyzer
+spec:
+  selector:
+    app: redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+---
+# 8. text-analyzer Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: text-analyzer
+  namespace: text-analyzer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: text-analyzer
+  template:
+    metadata:
+      labels:
+        app: text-analyzer
+    spec:
+      containers:
+        - name: text-analyzer
+          image: your-dockerhub-username/text-analyzer:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_USER
+            - name: MONGO_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGO_PASS
+            - name: MONGO_URI
+              value: mongodb://$(MONGO_USER):$(MONGO_PASS)@mongodb:27017/text-analyzer?authSource=admin
+            - name: REDIS_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: REDIS_HOST
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: redis-secret
+                  key: REDIS_PORT
+            - name: CACHE_TTL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: CACHE_TTL
+---
+# 9. text-analyzer Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: text-analyzer
+  namespace: text-analyzer
+spec:
+  selector:
+    app: text-analyzer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: LoadBalancer
