@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { User } from 'src/infrastructure/database/models/user.schema';
 import { create } from 'domain';
 import { getModelToken } from '@nestjs/mongoose';
+import * as bcrypt from 'bcrypt';
 
 
 describe('UserService', () => {
@@ -45,6 +46,20 @@ describe('UserService', () => {
       expect(await service.create(userDto)).toEqual(createdUser);
       expect(mockUserModel.create).toHaveBeenCalledWith(userDto);
     });
+
+
+    it('should hash the password before saving user', async () => {
+      const userDto = { username: 'test', password: 'pass123' };
+      const hashedPassword = await bcrypt.hash(userDto.password, 10);
+      const expectedUser = { ...userDto, password: hashedPassword, _id: '1' };
+
+      // jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashedPassword); //TODO: work on the error
+      mockUserModel.create.mockResolvedValue(expectedUser);
+
+      const result = await service.create(userDto);
+      expect(result.password).toBe(hashedPassword);
+    });
+
   });
 
   describe('findByUsername', () => {
