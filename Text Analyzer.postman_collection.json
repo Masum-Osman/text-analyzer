@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "ee03a1cf-e5a5-41a3-8c27-751d2892152e",
+		"name": "Text Analyzer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5689577",
+		"_collection_link": "https://ap2trucklgbe.postman.co/workspace/My-Workspace~1ee98bc9-e7a2-47d1-825c-f1580a031047/collection/5689577-ee03a1cf-e5a5-41a3-8c27-751d2892152e?action=share&source=collection_link&creator=5689577"
+	},
+	"item": [
+		{
+			"name": "Post Text",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3VtIiwic3ViIjoiNjgyMDY1MjgzMTZmNDMzYjZmZWQ1N2ZhIiwiaWF0IjoxNzQ2OTUzNTY3LCJleHAiOjE3NDY5NTcxNjd9.25O33LPMRisGZ3Sc0_r96Gr_6_MGXumb__AX6Rt6Wgk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"content\": \"The quick brown fox jumps over the lazy dog. The lazy dog slept in the sun.\",\n  \"createdBy\": \"masum\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/texts",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"texts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Word count by Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3VtIiwic3ViIjoiNjgyMDY1MjgzMTZmNDMzYjZmZWQ1N2ZhIiwiaWF0IjoxNzQ2OTYyMDMyLCJleHAiOjE3NDY5NjU2MzJ9.x2gMYVm6KHjy7IPXHNPIecSsTOj9ri6PqZiDDNrbsIA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{local}}/texts/68206572316f433b6fed57fd/characters",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"texts",
+						"68206572316f433b6fed57fd",
+						"characters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Characters count by Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3VtIiwic3ViIjoiNjgyMDY1MjgzMTZmNDMzYjZmZWQ1N2ZhIiwiaWF0IjoxNzQ2OTYyMDMyLCJleHAiOjE3NDY5NjU2MzJ9.x2gMYVm6KHjy7IPXHNPIecSsTOj9ri6PqZiDDNrbsIA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{local}}/texts/68206572316f433b6fed57fd/characters",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"texts",
+						"68206572316f433b6fed57fd",
+						"characters"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sentences count by Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3VtIiwic3ViIjoiNjgyMDY1MjgzMTZmNDMzYjZmZWQ1N2ZhIiwiaWF0IjoxNzQ2OTYyMDMyLCJleHAiOjE3NDY5NjU2MzJ9.x2gMYVm6KHjy7IPXHNPIecSsTOj9ri6PqZiDDNrbsIA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{local}}/texts/68206572316f433b6fed57fd/sentences",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"texts",
+						"68206572316f433b6fed57fd",
+						"sentences"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get longest-words count by Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3VtIiwic3ViIjoiNjgyMDY1MjgzMTZmNDMzYjZmZWQ1N2ZhIiwiaWF0IjoxNzQ2OTYyMDMyLCJleHAiOjE3NDY5NjU2MzJ9.x2gMYVm6KHjy7IPXHNPIecSsTOj9ri6PqZiDDNrbsIA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{local}}/texts/68206572316f433b6fed57fd/longest-words",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"texts",
+						"68206572316f433b6fed57fd",
+						"longest-words"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Paragraphs count by Id",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1hc3VtIiwic3ViIjoiNjgyMDY1MjgzMTZmNDMzYjZmZWQ1N2ZhIiwiaWF0IjoxNzQ2OTYyMDMyLCJleHAiOjE3NDY5NjU2MzJ9.x2gMYVm6KHjy7IPXHNPIecSsTOj9ri6PqZiDDNrbsIA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{local}}/texts/68206572316f433b6fed57fd/paragraphs",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"texts",
+						"68206572316f433b6fed57fd",
+						"paragraphs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Signup",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"masum\",\n    \"password\": \"12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/user/signup",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"user",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"masum\",\n    \"password\": \"12345\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/auth/login",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

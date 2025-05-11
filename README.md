@@ -78,25 +78,81 @@ Access:
 
 ## 📄 API Endpoints
 
-| Method | Endpoint        | Description         |
-| ------ | --------------- | ------------------- |
-| POST   | `/auth/login`   | Login and get token |
-| POST   | `/users/signup` | Create new user     |
-| POST   | `/text/analyze` | Analyze input text  |
+All secured endpoints require a JWT token in the `Authorization` header like so:
+`Authorization: Bearer <token>`
 
-> All protected routes require JWT in `Authorization: Bearer <token>`
+### 🔐 Auth
+
+| Method | Endpoint       | Description                      |
+| ------ | -------------- | -------------------------------- |
+| POST   | `/auth/login`  | Login with username and password |
+| POST   | `/user/signup` | Register a new user              |
 
 ---
 
-## 🧾 Logs
+### 🧠 Text Analysis
 
-Logs are piped to Logstash and visualized in Kibana.
+| Method | Endpoint                   | Description              |
+| ------ | -------------------------- | ------------------------ |
+| POST   | `/texts`                   | Submit text for analysis |
+| GET    | `/texts/:id/characters`    | Get character count      |
+| GET    | `/texts/:id/words`         | Get word count           |
+| GET    | `/texts/:id/sentences`     | Get sentence count       |
+| GET    | `/texts/:id/paragraphs`    | Get paragraph count      |
+| GET    | `/texts/:id/longest-words` | Get longest words list   |
 
-To view logs in the container:
+> Replace `:id` with the actual text ID returned from the POST `/texts` endpoint.
+
+
+## 📊 Log Visualization with Kibana
+
+This project uses the **ELK stack (Elasticsearch, Logstash, and Kibana)** to collect, process, and visualize logs from the `text-analyzer` service.
+
+### ✅ Prerequisites
+
+Make sure the containers are up and running:
 
 ```bash
-docker logs -f <container-name>
+docker-compose up --build
 ```
+
+### 🔍 Accessing Logs via Kibana
+
+Once the stack is running, you can view and explore logs in **Kibana**:
+
+* **Kibana URL**: [http://localhost:5601](http://localhost:5601)
+
+### 🚦 How It Works
+
+* `Filebeat` monitors the logs directory (`./logs`) and Docker container logs.
+* Logs are forwarded to `Logstash` for parsing and enrichment.
+* `Logstash` sends the processed logs to `Elasticsearch`.
+* `Kibana` visualizes the logs stored in `Elasticsearch`.
+
+### 📁 Log Storage Location
+
+Logs from the `text-analyzer` service are mounted locally in:
+
+```bash
+./logs
+```
+
+Ensure your application writes logs to this directory or to stdout/stderr (which Filebeat is also configured to capture).
+
+### 📈 Creating a Log Dashboard
+
+1. Open Kibana at [http://localhost:5601](http://localhost:5601).
+2. Navigate to **Discover**.
+3. Select or create an index pattern (e.g., `filebeat-*`).
+4. You can now filter, search, and view real-time logs.
+
+### 🛠️ Troubleshooting
+
+* If you don’t see any logs in Kibana, ensure:
+
+  * The `./logs` directory exists and contains files.
+  * Filebeat and Logstash services are running.
+  * Your app is writing logs to the correct location.
 
 ---
 
