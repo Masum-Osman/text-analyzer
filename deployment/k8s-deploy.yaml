@@ -15,7 +15,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
-  namespace: text-analyzer
+  namespace: argocd
 data:
   CACHE_TTL: "60"
 ---
@@ -24,7 +24,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb
-  namespace: text-analyzer
+  namespace: argocd
 spec:
   replicas: 1
   selector:
@@ -63,7 +63,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb
-  namespace: text-analyzer
+  namespace: argocd
 spec:
   selector:
     app: mongodb
@@ -77,7 +77,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: redis
-  namespace: text-analyzer
+  namespace: argocd
 spec:
   replicas: 1
   selector:
@@ -99,7 +99,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: redis
-  namespace: text-analyzer
+  namespace: argocd
 spec:
   selector:
     app: redis
@@ -113,7 +113,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: text-analyzer
-  namespace: text-analyzer
+  namespace: argocd
 spec:
   replicas: 1
   selector:
@@ -163,7 +163,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: text-analyzer
-  namespace: text-analyzer
+  namespace: argocd
 spec:
   selector:
     app: text-analyzer
